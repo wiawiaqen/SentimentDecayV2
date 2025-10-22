@@ -41,7 +41,7 @@ env/
 *.code-workspace
 
 # Data files (if large)
-*.csv
+# *.csv
 *.xlsx
 *.parquet
 
