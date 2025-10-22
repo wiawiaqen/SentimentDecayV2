@@ -1,0 +1,67 @@
+# Sentiment Decay Analysis Configuration
+
+# Data Paths
+data:
+  aapl_path: "../AAPL_cleaned.csv"
+  msft_path: "../MSFT_cleaned.csv"
+  reuters_path: "../reuters_headlines.csv"
+  output_dir: "../results"
+  cache_dir: "../cache"  # Directory for caching intermediate results
+
+# Sentiment Extraction
+sentiment:
+  model_name: "ProsusAI/finbert"
+  batch_size: 64
+  max_length: 512
+
+# Decay Functions
+decay:
+  exponential:
+    lambda_values: [0.1, 0.2, 0.3, 0.5, 0.7, 1.0, 1.2, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0]
+  half_life:
+    h_values: [0.5, 1, 1.5, 2, 3, 4, 5, 7, 10, 14, 21]
+  linear:
+    beta_values: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+
+# Feature Engineering
+features:
+  technical:
+    - RSI
+    - MACD
+    - Momentum
+    - EMA_12
+    - EMA_26
+    - Volatility
+  sentiment_window: 3  # days to aggregate sentiment
+
+# Modeling
+modeling:
+  models:
+    - logistic_regression
+    - xgboost
+  train_window: 240  # trading days
+  test_window: 24    # trading days
+  rolling_splits: 10
+
+# Evaluation
+evaluation:
+  metrics:
+    - accuracy
+    - f1
+    - auc
+    - sharpe_ratio
+  trading_costs: 0.001  # 10 bps transaction cost
+  risk_free_rate: 0.02  # annual
+  shap_samples: 100
+
+# Grid Search
+grid_search:
+  optimization_metric: "sharpe_ratio"  # or "auc"
+  cv_folds: 5
+  n_jobs: -1
+
+# Caching
+cache:
+  enabled: true
+  sentiment_cache: true  # Cache sentiment extraction results
+  force_refresh: false   # Set to true to ignore cache and recompute

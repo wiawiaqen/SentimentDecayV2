@@ -1,0 +1,2 @@
+# This file keeps the cache directory in git
+# Actual cache files (*.pkl) are gitignored
